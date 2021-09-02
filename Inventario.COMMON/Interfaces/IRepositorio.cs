@@ -9,8 +9,9 @@ namespace Inventario.COMMON.Interfaces
     {
         bool Crear(T entidad);
         bool Editar(string id, T entidadMod);
-        bool Eliminar(T entidad);
+        bool Eliminar(string id);
         List<T> Leer { get; }
+
 
 
     }

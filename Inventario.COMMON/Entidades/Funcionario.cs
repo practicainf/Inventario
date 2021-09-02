@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Inventario.COMMON.Entidades
 {
-    public class Host:Base
+    public class Funcionario:Base
     {
         
         public String Nombre { get; set; }
