@@ -6,40 +6,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
 namespace Inventario.DAL
 {
-    public class RFuncionario : IRepositorio<Funcionario>
+    public class RTicket : IRepositorio<Ticket>
     {
         private string DBName = "Inventario.db";
-        private string TableName = "Funcionarios";
-        public List<Funcionario> Leer
+        private string TableName = "Tickets";
+
+        public List<Ticket> Read
         {
             get
             {
-                List<Funcionario> datos = new List<Funcionario>();
+                List<Ticket> datos = new List<Ticket>();
                 using (var db = new LiteDatabase(DBName))
                 {
-                    datos = db.GetCollection<Funcionario>(TableName).FindAll().ToList();
-
+                    datos = db.GetCollection<Ticket>(TableName).FindAll().ToList();
                 }
                 return datos;
             }
-
         }
 
-        public List<Funcionario> Read => throw new NotImplementedException();
-
-        public bool Create(Funcionario entidad)
+        public bool Create(Ticket entidad)
         {
             entidad.Id = Guid.NewGuid().ToString();
             try
             {
                 using (var db = new LiteDatabase(DBName))
                 {
-                    var coleccion = db.GetCollection<Funcionario>(TableName);
+                    var coleccion = db.GetCollection<Ticket>(TableName);
                     coleccion.Insert(entidad);
-
                 }
                 return true;
             }
@@ -49,34 +44,14 @@ namespace Inventario.DAL
             }
         }
 
-        public bool Update(string id, Funcionario entidadMod)
-        {
-            try
-            {
-                using (var db = new LiteDatabase(DBName))
-                {
-                    var coleccion = db.GetCollection<Funcionario>(TableName);
-                    coleccion.Update(entidadMod);
-
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-
-
-        public bool Delete(Funcionario entidad, string id)
+        public bool Delete(Ticket entidad, string id)
         {
             try
             {
 
                 using (var db = new LiteDatabase(DBName))
                 {
-                    var coleccion = db.GetCollection<Funcionario>(TableName);
+                    var coleccion = db.GetCollection<Ticket>(TableName);
                     coleccion.Delete(entidad.Id == id);
                 }
                 return true;
@@ -86,6 +61,22 @@ namespace Inventario.DAL
                 return false;
             }
         }
+
+        public bool Update(string id, Ticket entidadMod)
+        {
+            try
+            {
+                using (var db = new LiteDatabase(DBName))
+                {
+                    var coleccion = db.GetCollection<Ticket>(TableName);
+                    coleccion.Update(entidadMod);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
-        
 }

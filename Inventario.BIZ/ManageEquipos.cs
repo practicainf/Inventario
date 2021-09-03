@@ -1,0 +1,50 @@
+﻿using Inventario.COMMON.Entidades;
+using Inventario.COMMON.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Inventario.BIZ
+{
+
+    public class ManageEquipoes : IManageEquipos
+    {
+        IRepositorio<Equipo> repositorio;
+        public ManageEquipoes(IRepositorio<Equipo> repo)
+        {
+            repositorio = repo;
+        }
+
+        public List<Equipo> List => repositorio.Read;
+
+        public bool Create(Equipo entidad)
+        {
+            return repositorio.Create(entidad);
+        }
+
+        
+
+        public bool Delete(Equipo entidad, string id)
+        {
+            return repositorio.Delete(entidad, id);
+        }
+
+        
+
+        public Equipo Search(string id)
+        {
+            return List.Where(e => e.Id == id).SingleOrDefault();
+        }
+
+        public bool Update(string id, Equipo entidadMod)
+        {
+            return repositorio.Update(id, entidadMod);
+        }
+
+        
+
+        
+    }
+
+}
