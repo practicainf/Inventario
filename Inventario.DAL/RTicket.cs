@@ -44,15 +44,14 @@ namespace Inventario.DAL
             }
         }
 
-        public bool Delete(Ticket entidad, string id)
+        public bool Delete(Ticket entidad)
         {
             try
             {
-
                 using (var db = new LiteDatabase(DBName))
                 {
                     var coleccion = db.GetCollection<Ticket>(TableName);
-                    coleccion.Delete(entidad.Id == id);
+                    coleccion.Delete(entidad.Id);
                 }
                 return true;
             }

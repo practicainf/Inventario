@@ -21,10 +21,15 @@ namespace Inventario.BIZ
             return repositorio.Create(entidad);
         }
 
-        public bool Delete(Funcionario entidad, string id)
+        public bool Delete(Funcionario entidad)
         {
-            return repositorio.Delete(entidad, id);
-        }        
+            return repositorio.Delete(entidad);
+        }
+
+        public List<Funcionario> FuncionariosPorArea(string area)
+        {
+            return List.Where(e => e.Area == area).ToList();
+        }
 
         public Funcionario Search(string id)
         {

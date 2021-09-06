@@ -1,0 +1,64 @@
+﻿<Window x:Class="Inventario.GUI.Admin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Inventario.GUI.Admin"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <TabControl x:Name="tabControl">
+        <TabItem Header="Funcionarios">
+            <Grid Background="#FFE5E5E5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto">
+                        
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+
+                    </RowDefinition>
+                </Grid.RowDefinitions>
+                <WrapPanel>
+                    <Button x:Name="btnNewFunc" Click="btnNewFunc_Click">Nuevo</Button>
+                    <Button x:Name="btnEditFunc" Click="btnEditFunc_Click">Editar</Button>
+                    <Button x:Name="btnSaveFunc" Click="btnSaveFunc_Click">Guardar</Button>
+                    <Button x:Name="btnCancelFunc" Click="btnCancelFunc_Click">Cancelar</Button>
+                    <Button x:Name="btnDelFunc" Click="btnDelFunc_Click">Eliminar</Button>
+                </WrapPanel>
+                <WrapPanel Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >ID</TextBlock>
+                        <TextBlock x:Name="txtFuncId" ></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >Nombre</TextBlock>
+                        <TextBox x:Name="txtFuncName" Width="100"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >Apellidos</TextBlock>
+                        <TextBox x:Name="txtFuncLname" Width="100"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >Area</TextBlock>
+                        <TextBox x:Name="txtFuncArea" Width="100"></TextBox>
+                    </StackPanel>
+                </WrapPanel>
+                <DataGrid x:Name="dtgFunc" Grid.Row="2" IsReadOnly="True">
+                    
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Equipos">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem Header="Reportes">
+            <Grid Background="#FFE5E5E5">
+
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</Window>

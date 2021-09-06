@@ -25,9 +25,9 @@ namespace Inventario.BIZ
 
         
 
-        public bool Delete(Equipo entidad, string id)
+        public bool Delete(Equipo entidad)
         {
-            return repositorio.Delete(entidad, id);
+            return repositorio.Delete(entidad);
         }
 
         

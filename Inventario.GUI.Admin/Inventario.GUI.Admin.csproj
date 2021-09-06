@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Inventario.BIZ\Inventario.BIZ.csproj" />
     <ProjectReference Include="..\Inventario.COMMON\Inventario.COMMON.csproj" />
     <ProjectReference Include="..\Inventario.DAL\Inventario.DAL.csproj" />
   </ItemGroup>

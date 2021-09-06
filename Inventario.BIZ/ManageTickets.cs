@@ -21,9 +21,9 @@ namespace Inventario.BIZ
             return repositorio.Create(entidad);
         }
 
-        public bool Delete(Ticket entidad, string id)
+        public bool Delete(Ticket entidad)
         {
-            return repositorio.Delete(entidad, id);
+            return repositorio.Delete(entidad);
         }
 
         public Ticket Search(string id)

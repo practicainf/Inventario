@@ -10,7 +10,7 @@ namespace Inventario.COMMON.Interfaces
     {
         bool Create(T entidad);
         List<T> List { get; }
-        bool Delete(T entidad, string id);
+        bool Delete(T entidad);
         bool Update(string id, T entidadMod);
         T Search(string id);
     }

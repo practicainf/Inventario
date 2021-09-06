@@ -8,7 +8,7 @@ namespace Inventario.COMMON.Interfaces
 {
     public interface IManageFuncionarios : IManage<Funcionario>
     {
+        List<Funcionario> FuncionariosPorArea(string area);
         
-
     }
 }

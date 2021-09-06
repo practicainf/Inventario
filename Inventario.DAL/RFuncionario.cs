@@ -28,7 +28,18 @@ namespace Inventario.DAL
 
         }
 
-        public List<Funcionario> Read => throw new NotImplementedException();
+        public List<Funcionario> Read
+        {
+            get
+            {
+                List<Funcionario> datos = new List<Funcionario>();
+                using (var db = new LiteDatabase(DBName))
+                {
+                    datos = db.GetCollection<Funcionario>(TableName).FindAll().ToList();
+                }
+                return datos;
+            }
+        }
 
         public bool Create(Funcionario entidad)
         {
@@ -69,15 +80,15 @@ namespace Inventario.DAL
 
 
 
-        public bool Delete(Funcionario entidad, string id)
+        
+        public bool Delete(Funcionario entidad)
         {
             try
             {
-
                 using (var db = new LiteDatabase(DBName))
                 {
                     var coleccion = db.GetCollection<Funcionario>(TableName);
-                    coleccion.Delete(entidad.Id == id);
+                    coleccion.Delete(entidad.Id);
                 }
                 return true;
             }
@@ -86,6 +97,8 @@ namespace Inventario.DAL
                 return false;
             }
         }
+
+
     }
         
 }
