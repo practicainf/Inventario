@@ -9,5 +9,9 @@ namespace Inventario.COMMON.Entidades
         
         public String Nombre{ get; set; }   
         public String Tipo { get; set; }
+        public override string ToString()
+        {
+            return string.Format("[{0}] {1}", Tipo, Nombre);
+        }
     }
 }

@@ -8,10 +8,10 @@ using System.Text;
 namespace Inventario.BIZ
 {
 
-    public class ManageEquipoes : IManageEquipos
+    public class ManageEquipos : IManageEquipos
     {
         IRepositorio<Equipo> repositorio;
-        public ManageEquipoes(IRepositorio<Equipo> repo)
+        public ManageEquipos(IRepositorio<Equipo> repo)
         {
             repositorio = repo;
         }

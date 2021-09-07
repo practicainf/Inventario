@@ -12,7 +12,7 @@
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto">
-                        
+
                     </RowDefinition>
                     <RowDefinition Height="auto">
 
@@ -47,15 +47,103 @@
                     </StackPanel>
                 </WrapPanel>
                 <DataGrid x:Name="dtgFunc" Grid.Row="2" IsReadOnly="True">
-                    
+
                 </DataGrid>
             </Grid>
         </TabItem>
-        <TabItem Header="Equipos">
-            <Grid Background="#FFE5E5E5"/>
+        <TabItem Header="Equipos" Height="20" VerticalAlignment="Bottom">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0">
+                    <Button x:Name="btnEquiposNuevo" Click="btnEquiposNuevo_Click" >Nuevo</Button>
+                    <Button x:Name="btnEquiposEditar" Click="btnEquiposEditar_Click" >Editar</Button>
+                    <Button x:Name="btnEquiposGuardar" Click="btnEquiposGuardar_Click">Guardar</Button>
+                    <Button x:Name="btnEquiposCancelar"  Click="btnEquiposCancelar_Click">Cancelar</Button>
+                    <Button x:Name="btnEquiposEliminar" Click="btnEquiposEliminar_Click" >Eliminar</Button>
+                </WrapPanel>
+                <WrapPanel Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Id:</TextBlock>
+                        <TextBlock x:Name="txbEquiposId"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Nombre:</TextBlock>
+                        <TextBox x:Name="txbEquiposNombre" Width="200"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Tipo:</TextBlock>
+                        <TextBox x:Name="txbEquiposCategoria" Width="200"></TextBox>
+                    </StackPanel>
+
+                </WrapPanel>
+                <DataGrid x:Name="dtgEquipos" Grid.Row="3" IsReadOnly="True"/>
+            </Grid>
         </TabItem>
+
         <TabItem Header="Reportes">
-            <Grid Background="#FFE5E5E5">
+            <Grid Background="White">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0">Asignacion de Equipos</Label>
+                        <WrapPanel Grid.Row="1">
+                            <Button x:Name="btnNuevoTicket" Click="btnNuevoTicket_Click">Nuevo</Button>
+                            <Button x:Name="btnEliminarTicket" Click="btnEliminarTicket_Click">Eliminar</Button>
+                        </WrapPanel>
+                        <DataGrid Grid.Row="2" x:Name="dtgTickets" IsReadOnly="True" MouseDoubleClick="dtgTickets_MouseDoubleClick"></DataGrid>
+                    </Grid>
+                    <Grid Grid.Column="1" x:Name="gridDetalle">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Funcionario:</Label>
+                            <ComboBox x:Name="cmbFuncionario" Width="300"/>
+                        </StackPanel>
+                        <WrapPanel Grid.Row="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Fecha Hora Recepción:</Label>
+                                <Label x:Name="lblFechaRecepcion"></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Fecha Entrega:</Label>
+                                <DatePicker x:Name="dtpFechaEntrega"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Fecha Retiro:</Label>
+                                <Label x:Name="lblFechaRetiro"></Label>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Equipo:</Label>
+                                <ComboBox x:Name="cmbEquipos" Width="200"/>
+                                <Button Width="50" x:Name="btnAgregarEquipo" Click="btnAgregarEquipo_Click">+</Button>
+                                <Button Width="50" x:Name="btnEliminarEquipo" Click="btnEliminarEquipo_Click">-</Button>
+                            </StackPanel>
+                        </WrapPanel>
+                        <DataGrid x:Name="dtgEquiposEnTicket" Grid.Row="2" IsReadOnly="True"></DataGrid>
+                        <StackPanel Grid.Row="3">
+                            <Button x:Name="btnEntregarTicket" Click="btnEntregarTicket_Click">Entregar</Button>
+                            <Button x:Name="btnGuardarTicket" Click="btnGuardarTicket_Click">Guardar</Button>
+                            <Button x:Name="btnCanelarTicket" Click="btnCanelarTicket_Click">Cancelar</Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
 
             </Grid>
         </TabItem>
