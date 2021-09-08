@@ -11,22 +11,9 @@ namespace Inventario.DAL
 {
     public class RFuncionario : IRepositorio<Funcionario>
     {
-        private string DBName = "Inventario.db";
+        private string DBName = @"C:\InventarioDB\Inventario.db";
         private string TableName = "Funcionarios";
-        public List<Funcionario> Leer
-        {
-            get
-            {
-                List<Funcionario> datos = new List<Funcionario>();
-                using (var db = new LiteDatabase(DBName))
-                {
-                    datos = db.GetCollection<Funcionario>(TableName).FindAll().ToList();
-
-                }
-                return datos;
-            }
-
-        }
+        
 
         public List<Funcionario> Read
         {

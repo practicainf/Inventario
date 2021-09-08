@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
 
     <TabControl x:Name="tabControl">
+        <!--Funcionario-->
         <TabItem Header="Funcionarios">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
@@ -30,8 +31,11 @@
                 </WrapPanel>
                 <WrapPanel Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock >ID</TextBlock>
                         <TextBlock x:Name="txtFuncId" ></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >Rut</TextBlock>
+                        <TextBox x:Name="txtFuncRut" Width="100"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock >Nombre</TextBlock>
@@ -51,6 +55,72 @@
                 </DataGrid>
             </Grid>
         </TabItem>
+        
+        <!--Gestion Departamentos-->
+        <TabItem Header="Edificios/Despartamentos">
+            <TabControl>
+                
+                <!--Gestion Unidad-->
+                <TabItem Header="Unidad">
+                    
+                        <Grid Background="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0">Unidades de Trabajo</Label>
+                                    <WrapPanel Grid.Row="1">
+                                    <Button x:Name="btnNuevoUnidad" Click="btnNuevoUnidad_Click">Nuevo</Button>
+                                        <Button x:Name="btnEliminarUnidad" Click="btnEliminarUnidad_Click">Eliminar</Button>
+                                    </WrapPanel>
+                                    <DataGrid Grid.Row="2" x:Name="dtgUnidad" IsReadOnly="True" MouseDoubleClick="dtgUnidad_MouseDoubleClick"></DataGrid>
+                                </Grid>
+                                <Grid Grid.Column="1" x:Name="gridDetalleUnidad">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal"/>
+                                <WrapPanel Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock >Nombre</TextBlock>
+                                        <TextBox x:Name="txtUnidadName" Width="100"></TextBox>
+                                    </StackPanel>
+
+
+                                    <StackPanel Orientation="Horizontal">
+                                            <Label>Equipo:</Label>
+                                            <ComboBox x:Name="cmbFuncionarios" Width="200"/>
+                                            <Button Width="50" x:Name="btnAgregarFuncionario" Click="btnAgregarFuncionario_Click">+</Button>
+                                            <Button Width="50" x:Name="btnEliminarFuncionario" Click="btnEliminarFuncionario_Click">-</Button>
+                                        </StackPanel>
+                                    </WrapPanel>
+                                <DataGrid x:Name="dtgFuncionariosEnUnidad" Grid.Row="2" IsReadOnly="True"></DataGrid>
+                                    <StackPanel Grid.Row="3">
+                                        
+                                        <Button x:Name="btnGuardarUnidad" Click="btnGuardarUnidad_Click">Guardar</Button>
+                                        <Button x:Name="btnCanelarUnidad" Click="btnCanelarUnidad_Click">Cancelar</Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
+                    
+                </TabItem>
+                
+            </TabControl>
+        </TabItem>
+        
+        <!--Equipos-->
         <TabItem Header="Equipos" Height="20" VerticalAlignment="Bottom">
             <Grid>
                 <Grid.RowDefinitions>
@@ -72,18 +142,27 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Nombre:</TextBlock>
-                        <TextBox x:Name="txbEquiposNombre" Width="200"></TextBox>
+                        <TextBox x:Name="txbEquiposNombre" Width="150"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Tipo:</TextBlock>
-                        <TextBox x:Name="txbEquiposCategoria" Width="200"></TextBox>
+                        <TextBox x:Name="txbEquiposCategoria" Width="150"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Marca:</TextBlock>
+                        <TextBox x:Name="txbEquiposMarca" Width="150"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Estado:</TextBlock>
+                        <TextBox x:Name="txbEquiposEstado" Width="150"></TextBox>
                     </StackPanel>
 
                 </WrapPanel>
                 <DataGrid x:Name="dtgEquipos" Grid.Row="3" IsReadOnly="True"/>
             </Grid>
         </TabItem>
-
+        
+        <!--Reportes-->
         <TabItem Header="Reportes">
             <Grid Background="White">
                 <Grid>
@@ -113,7 +192,7 @@
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
                             <Label>Funcionario:</Label>
-                            <ComboBox x:Name="cmbFuncionario" Width="300"/>
+                            <ComboBox x:Name="cmbFuncionario" Width="300" SelectionChanged="cmbFuncionario_SelectionChanged"/>
                         </StackPanel>
                         <WrapPanel Grid.Row="1">
                             <StackPanel Orientation="Horizontal">

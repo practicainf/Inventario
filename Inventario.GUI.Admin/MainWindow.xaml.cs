@@ -35,10 +35,20 @@ namespace Inventario.GUI.Admin
         IManageFuncionarios manageFuncionarios;
         IManageEquipos manageEquipos;
         IManageTickets manageTickets;
+        IManageUnidad manageUnidad;
+        IManageDepartamentos manageDepartamentos;
+        IManageEdificios manageEdificios;
         accion accionFunc;
         accion accionEquip;
         accion accionTicket;
+        accion accionUnidad;
+        accion accionDepartamento;
+        accion accionEdificio;
+
         Ticket ticket;
+        Unidad unidad;
+        Departamento departamento;
+        Edificio edificio;
 
 
 
@@ -49,6 +59,9 @@ namespace Inventario.GUI.Admin
             manageEquipos = new ManageEquipos(new REquipo());
             manageFuncionarios = new ManageFuncionarios(new RFuncionario());
             manageTickets = new ManageTickets(new RTicket());
+            manageUnidad = new ManageUnidads(new RUnidad());
+            manageDepartamentos = new ManageDepartamentos(new RDepartamento());
+            manageEdificios = new ManageEdificios(new REdificio());
 
             EditFuncBtns(false);
             CleanFuncValues();
@@ -58,19 +71,32 @@ namespace Inventario.GUI.Admin
             CleanEquipValues();
             UpdateEquipGrid();
 
+            CleanUnidadValues();
+            UpdateUnidadGrid();
+
 
 
             UpdateTicketGrid();
             gridDetalle.IsEnabled = false;
 
         }
+
+        
         //Boton Guardar Ticket
         private void btnGuardarTicket_Click(object sender, RoutedEventArgs e)
         {
             if (accionTicket == accion.New)
             {
-
-                ticket.FechaEntrega = dtpFechaEntrega.SelectedDate.Value;
+                if(ticket.FechaEntrega == null)
+                {
+                    ticket.FechaEntrega = dtpFechaEntrega.SelectedDate.Value;
+                    
+                }
+                else
+                {
+                    ticket.FechaEntrega = DateTime.Now;
+                }
+                
                 ticket.FechaIngreso = DateTime.Now;
                 ticket.Empleado = cmbFuncionario.SelectedItem as Funcionario;
                 if (manageTickets.Create(ticket))
@@ -150,18 +176,20 @@ namespace Inventario.GUI.Admin
             cmbFuncionario.ItemsSource = null;
         }
 
-        //Boton Agregar Equipo
+        //Boton Agregar Equipo a Ticket
         private void btnAgregarEquipo_Click(object sender, RoutedEventArgs e)
         {
             Equipo eq = cmbEquipos.SelectedItem as Equipo;
+            
             if (eq != null)
             {
+                //eq.Nombre = eq.Nombre;
                 ticket.EquipoSolicitado.Add(eq);
                 ActualizarEquiposEnTicket();
             }
         }
 
-        //Boton Eliminar Equipo
+        //Boton Eliminar Equipo de Ticket
         private void btnEliminarEquipo_Click(object sender, RoutedEventArgs e)
         {
             Equipo eq = dtgEquiposEnTicket.SelectedItem as Equipo;
@@ -246,6 +274,8 @@ namespace Inventario.GUI.Admin
             txbEquiposCategoria.Clear();
             txbEquiposId.Text = "";
             txbEquiposNombre.Clear();
+            txbEquiposMarca.Clear();
+            txbEquiposEstado.Clear();
 
         }
 
@@ -272,6 +302,7 @@ namespace Inventario.GUI.Admin
         private void CleanFuncValues()
         {
             txtFuncId.Text = "";
+            txtFuncRut.Clear();
             txtFuncName.Clear();
             txtFuncLname.Clear();
             txtFuncArea.Clear();
@@ -304,10 +335,10 @@ namespace Inventario.GUI.Admin
             Funcionario emp = dtgFunc.SelectedItem as Funcionario;
             if (emp != null)
             {
-                txtFuncId.Text = emp.Id;
                 txtFuncLname.Text = emp.Apellido;
                 txtFuncArea.Text = emp.Area;
                 txtFuncName.Text = emp.Nombre;
+                txtFuncRut.Text = emp.Rut;
                 accionFunc = accion.Edit;
                 EditFuncBtns(true);
             }
@@ -321,6 +352,7 @@ namespace Inventario.GUI.Admin
             {
                 Funcionario emp = new Funcionario()
                 {
+                    Rut = txtFuncRut.Text,
                     Nombre = txtFuncName.Text,
                     Apellido = txtFuncLname.Text,
                     Area = txtFuncArea.Text
@@ -340,6 +372,7 @@ namespace Inventario.GUI.Admin
             else
             {
                 Funcionario emp = dtgFunc.SelectedItem as Funcionario;
+                emp.Rut = txtFuncRut.Text;
                 emp.Nombre = txtFuncName.Text;
                 emp.Apellido = txtFuncLname.Text;
                 emp.Area = txtFuncArea.Text;
@@ -411,6 +444,8 @@ namespace Inventario.GUI.Admin
                 txbEquiposId.Text = eq.Id;
                 txbEquiposNombre.Text = eq.Nombre;
                 txbEquiposCategoria.Text = eq.Tipo;
+                txbEquiposMarca.Text = eq.Marca;
+                txbEquiposEstado.Text = eq.Estado;
             }
 
         }
@@ -423,7 +458,9 @@ namespace Inventario.GUI.Admin
                 Equipo eq = new Equipo()
                 {
                     Tipo = txbEquiposCategoria.Text,
-                    Nombre = txbEquiposNombre.Text
+                    Nombre = txbEquiposNombre.Text,
+                    Marca = txbEquiposMarca.Text,
+                    Estado = txbEquiposEstado.Text
                 };
                 if (manageEquipos.Create(eq))
                 {
@@ -442,6 +479,8 @@ namespace Inventario.GUI.Admin
                 Equipo eq = dtgEquipos.SelectedItem as Equipo;
                 eq.Tipo = txbEquiposCategoria.Text;
                 eq.Nombre = txbEquiposNombre.Text;
+                eq.Marca = txbEquiposMarca.Text;
+                eq.Estado = txbEquiposEstado.Text;
                 if (manageEquipos.Update(eq.Id, eq))
                 {
                     MessageBox.Show("Equipo correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -484,6 +523,177 @@ namespace Inventario.GUI.Admin
                 }
             }
 
+        }
+
+        private void cmbFuncionario_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+        /////////////////////////////////////////////
+        ///
+
+        //Boton Guardar Unidad
+        private void btnGuardarUnidad_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionUnidad == accion.New)
+            {
+
+
+                unidad.NombreUnidad = txtUnidadName.Text;
+                if (manageUnidad.Create(unidad))
+                {
+                    MessageBox.Show("Unidad guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanUnidadValues();
+                    
+                    gridDetalleUnidad.IsEnabled = false;
+                    UpdateUnidadGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Unidad", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                unidad.NombreUnidad = txbEquiposNombre.Text;
+                
+
+                if (manageUnidad.Update(unidad.Id, unidad))
+                {
+                    MessageBox.Show("Unidad guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanUnidadValues();
+                    gridDetalle.IsEnabled = false;
+                    UpdateUnidadGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Unidad", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Unidad
+        private void btnCanelarUnidad_Click(object sender, RoutedEventArgs e)
+        {
+            CleanUnidadValues();
+            gridDetalleUnidad.IsEnabled = false;
+        }
+
+        //Doble Click Unidad
+        private void dtgUnidad_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Unidad u = dtgUnidad.SelectedItem as Unidad;
+            if (u != null)
+            {
+                gridDetalleUnidad.IsEnabled = true;
+                unidad = u;
+                ActualizarFuncionariosEnUnidad();
+                accionUnidad = accion.Edit;
+
+                txtUnidadName.Text = u.NombreUnidad;
+
+                ActualizarCombosUnidad();
+            }
+
+            
+        }
+
+        //Boton Agregar Funcionarios a Unidad
+        private void btnAgregarFuncionario_Click(object sender, RoutedEventArgs e)
+        {
+            
+            Funcionario f = cmbFuncionarios.SelectedItem as Funcionario;
+
+            if (f != null)
+            {
+                unidad.FuncionariosEnUnidad.Add(f);
+                ActualizarFuncionariosEnUnidad();
+            }
+            
+        }
+
+        //Boton Eliminar Equipo de Ticket
+        private void btnEliminarFuncionario_Click(object sender, RoutedEventArgs e)
+        {
+            Funcionario f = dtgFuncionariosEnUnidad.SelectedItem as Funcionario;
+            if (f != null)
+            {
+                unidad.FuncionariosEnUnidad.Remove(f);
+                ActualizarFuncionariosEnUnidad();
+            }
+        }
+
+        //Boton Nuevo Unidad
+        private void btnNuevoUnidad_Click(object sender, RoutedEventArgs e)
+        {
+            gridDetalleUnidad.IsEnabled = true;
+            ActualizarCombosUnidad();
+            unidad = new Unidad();
+            unidad.FuncionariosEnUnidad = new List<Funcionario>();
+            ActualizarFuncionariosEnUnidad();
+            accionUnidad = accion.New;
+        }
+
+        //Actualizar ComboBoxUnidad
+        private void ActualizarCombosUnidad()
+        {
+
+            cmbFuncionarios.ItemsSource = null;
+            cmbFuncionarios.ItemsSource = manageFuncionarios.List;
+
+        }
+
+        //Actualizar Funcionarios en Unidad
+        private void ActualizarFuncionariosEnUnidad()
+        {
+
+            dtgFuncionariosEnUnidad.ItemsSource = null;
+            dtgFuncionariosEnUnidad.ItemsSource = unidad.FuncionariosEnUnidad;
+
+        }
+
+        //Boton Eliminar Unidad
+        private void btnEliminarUnidad_Click(object sender, RoutedEventArgs e)
+        {
+            Unidad u = dtgUnidad.SelectedItem as Unidad;
+            if (u != null)
+            {
+                if (MessageBox.Show("Realmente deseas eliminar esta Unidad?", "Almacén", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (manageUnidad.Delete(u))
+                    {
+                        MessageBox.Show("Eliminada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        UpdateUnidadGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Algo salio mal...", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        //Actualizar Tabla Unidad
+        private void UpdateUnidadGrid()
+        {
+            dtgUnidad.ItemsSource = null;
+            dtgUnidad.ItemsSource = manageUnidad.List;
+        }
+
+        //Limpiar Valores Unidad
+        private void CleanUnidadValues()
+        {
+            txtUnidadName.Clear();
+            dtgFuncionariosEnUnidad.ItemsSource = null;
+            cmbFuncionarios.ItemsSource = null;
         }
     }
 }

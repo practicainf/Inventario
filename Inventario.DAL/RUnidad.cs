@@ -8,32 +8,32 @@ using System.Text;
 
 namespace Inventario.DAL
 {
-    public class RTicket : IRepositorio<Ticket>
+    public class RUnidad : IRepositorio<Unidad>
     {
         private string DBName = @"C:\InventarioDB\Inventario.db";
-        private string TableName = "Tickets";
+        private string TableName = "Unidades";
 
-        public List<Ticket> Read
+        public List<Unidad> Read
         {
             get
             {
-                List<Ticket> datos = new List<Ticket>();
+                List<Unidad> datos = new List<Unidad>();
                 using (var db = new LiteDatabase(DBName))
                 {
-                    datos = db.GetCollection<Ticket>(TableName).FindAll().ToList();
+                    datos = db.GetCollection<Unidad>(TableName).FindAll().ToList();
                 }
                 return datos;
             }
         }
 
-        public bool Create(Ticket entidad)
+        public bool Create(Unidad entidad)
         {
             entidad.Id = Guid.NewGuid().ToString();
             try
             {
                 using (var db = new LiteDatabase(DBName))
                 {
-                    var coleccion = db.GetCollection<Ticket>(TableName);
+                    var coleccion = db.GetCollection<Unidad>(TableName);
                     coleccion.Insert(entidad);
                 }
                 return true;
@@ -44,13 +44,13 @@ namespace Inventario.DAL
             }
         }
 
-        public bool Delete(Ticket entidad)
+        public bool Delete(Unidad entidad)
         {
             try
             {
                 using (var db = new LiteDatabase(DBName))
                 {
-                    var coleccion = db.GetCollection<Ticket>(TableName);
+                    var coleccion = db.GetCollection<Unidad>(TableName);
                     coleccion.Delete(entidad.Id);
                 }
                 return true;
@@ -61,13 +61,13 @@ namespace Inventario.DAL
             }
         }
 
-        public bool Update(string id, Ticket entidadMod)
+        public bool Update(string id, Unidad entidadMod)
         {
             try
             {
                 using (var db = new LiteDatabase(DBName))
                 {
-                    var coleccion = db.GetCollection<Ticket>(TableName);
+                    var coleccion = db.GetCollection<Unidad>(TableName);
                     coleccion.Update(entidadMod);
                 }
                 return true;
