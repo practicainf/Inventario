@@ -74,6 +74,13 @@ namespace Inventario.GUI.Admin
             CleanUnidadValues();
             UpdateUnidadGrid();
 
+            CleanDepartamentoValues();
+            UpdateDepartamentoGrid();
+            
+            CleanEdificioValues();
+            UpdateEdificioGrid();
+
+
 
 
             UpdateTicketGrid();
@@ -82,6 +89,8 @@ namespace Inventario.GUI.Admin
         }
 
         
+
+
         //Boton Guardar Ticket
         private void btnGuardarTicket_Click(object sender, RoutedEventArgs e)
         {
@@ -261,35 +270,15 @@ namespace Inventario.GUI.Admin
 
         }
 
-        //Actualizar Tabla de Equipos
-        private void UpdateEquipGrid()
-        {
-            dtgEquipos.ItemsSource = null;
-            dtgEquipos.ItemsSource = manageEquipos.List;
-        }
 
-        //Limpiar Valores Equipo
-        private void CleanEquipValues()
-        {
-            txbEquiposCategoria.Clear();
-            txbEquiposId.Text = "";
-            txbEquiposNombre.Clear();
-            txbEquiposMarca.Clear();
-            txbEquiposEstado.Clear();
 
-        }
 
-        //Botones Edicion Equipos
-        private void EditEquipBtns(bool value)
-        {
-            btnEquiposCancelar.IsEnabled = value;
-            btnEquiposEditar.IsEnabled = !value;
-            btnEquiposEliminar.IsEnabled = !value;
-            btnEquiposGuardar.IsEnabled = value;
-            btnEquiposNuevo.IsEnabled = !value;
 
-        }
 
+
+
+
+       
         //Actualizar Tabla Funcionarios
         private void UpdateFuncGrid()
         {
@@ -422,6 +411,15 @@ namespace Inventario.GUI.Admin
 
         }
 
+
+
+
+
+
+
+
+
+
         //Boton Nuevo Equipo
         private void btnEquiposNuevo_Click(object sender, RoutedEventArgs e)
         {
@@ -525,8 +523,32 @@ namespace Inventario.GUI.Admin
 
         }
 
-        private void cmbFuncionario_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //Actualizar Tabla de Equipos
+        private void UpdateEquipGrid()
         {
+            dtgEquipos.ItemsSource = null;
+            dtgEquipos.ItemsSource = manageEquipos.List;
+        }
+
+        //Limpiar Valores Equipo
+        private void CleanEquipValues()
+        {
+            txbEquiposCategoria.Clear();
+            txbEquiposId.Text = "";
+            txbEquiposNombre.Clear();
+            txbEquiposMarca.Clear();
+            txbEquiposEstado.Clear();
+
+        }
+
+        //Botones Edicion Equipos
+        private void EditEquipBtns(bool value)
+        {
+            btnEquiposCancelar.IsEnabled = value;
+            btnEquiposEditar.IsEnabled = !value;
+            btnEquiposEliminar.IsEnabled = !value;
+            btnEquiposGuardar.IsEnabled = value;
+            btnEquiposNuevo.IsEnabled = !value;
 
         }
 
@@ -537,9 +559,8 @@ namespace Inventario.GUI.Admin
 
 
 
-        /////////////////////////////////////////////
-        ///
 
+                
         //Boton Guardar Unidad
         private void btnGuardarUnidad_Click(object sender, RoutedEventArgs e)
         {
@@ -634,6 +655,7 @@ namespace Inventario.GUI.Admin
         //Boton Nuevo Unidad
         private void btnNuevoUnidad_Click(object sender, RoutedEventArgs e)
         {
+            CleanUnidadValues();
             gridDetalleUnidad.IsEnabled = true;
             ActualizarCombosUnidad();
             unidad = new Unidad();
@@ -680,7 +702,7 @@ namespace Inventario.GUI.Admin
                 }
             }
         }
-
+        
         //Actualizar Tabla Unidad
         private void UpdateUnidadGrid()
         {
@@ -694,6 +716,329 @@ namespace Inventario.GUI.Admin
             txtUnidadName.Clear();
             dtgFuncionariosEnUnidad.ItemsSource = null;
             cmbFuncionarios.ItemsSource = null;
+        }
+
+        
+
+
+
+
+
+
+
+        //Boton Guardar Departamento
+        private void btnGuardarDepartamento_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionDepartamento == accion.New)
+            {
+
+
+                departamento.NombreDepartamento = txbDepartamentoNombre.Text;
+                if (manageDepartamentos.Create(departamento))
+                {
+                    MessageBox.Show("Departamento guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanDepartamentoValues();
+
+                    gridDetalleDepartamento.IsEnabled = false;
+                    UpdateDepartamentoGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Departamento", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                departamento.NombreDepartamento = txbDepartamentoNombre.Text;
+
+
+                if (manageDepartamentos.Update(departamento.Id, departamento))
+                {
+                    MessageBox.Show("Departamento guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanDepartamentoValues();
+                    gridDetalleDepartamento.IsEnabled = false;
+                    UpdateDepartamentoGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Departamento", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Departamento
+        private void btnCanelarDepartamento_Click(object sender, RoutedEventArgs e)
+        {
+            CleanDepartamentoValues();
+            gridDetalleDepartamento.IsEnabled = false;
+        }
+
+        //Doble Click Departamento
+        private void dtgDepartamento_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Departamento d = dtgDepartamento.SelectedItem as Departamento;
+            if (d != null)
+            {
+                gridDetalleDepartamento.IsEnabled = true;
+                departamento = d;
+                ActualizarUnidadesEnDepartamento();
+                accionDepartamento = accion.Edit;
+
+                txbDepartamentoNombre.Text = d.NombreDepartamento;
+
+                ActualizarCombosDepartamento();
+            }
+
+
+        }
+
+        //Boton Agregar Unidades a Departamento
+        private void btnAgregarUnidad_Click(object sender, RoutedEventArgs e)
+        {
+
+            Unidad u = cmbUnidades.SelectedItem as Unidad;
+
+            if (u != null)
+            {
+                departamento.UnidadesEnDepartamento.Add(u);
+                ActualizarUnidadesEnDepartamento();
+            }
+
+        }
+
+        //Boton Eliminar Equipo de Departamento
+        private void btnEliminarUnidadDepartamento_Click(object sender, RoutedEventArgs e)
+        {
+            Unidad u = dtgUnidadesEnDepartamento.SelectedItem as Unidad;
+            if (u != null)
+            {
+                departamento.UnidadesEnDepartamento.Remove(u);
+                ActualizarUnidadesEnDepartamento();
+            }
+        }
+
+        //Boton Nuevo Departamento
+        private void btnNuevoDepartamento_Click(object sender, RoutedEventArgs e)
+        {
+            CleanDepartamentoValues();
+            gridDetalleDepartamento.IsEnabled = true;
+            ActualizarCombosDepartamento();
+            departamento = new Departamento();
+            departamento.UnidadesEnDepartamento = new List<Unidad>();
+            ActualizarUnidadesEnDepartamento();
+            accionDepartamento = accion.New;
+
+        }
+
+        //Actualizar ComboBoxDepartamento
+        private void ActualizarCombosDepartamento()
+        {
+
+            cmbUnidades.ItemsSource = null;
+            cmbUnidades.ItemsSource = manageUnidad.List;
+
+        }
+
+        //Actualizar Unidades en Departamento
+        private void ActualizarUnidadesEnDepartamento()
+        {
+
+            dtgUnidadesEnDepartamento.ItemsSource = null;
+            dtgUnidadesEnDepartamento.ItemsSource = departamento.UnidadesEnDepartamento;
+
+        }
+
+        //Boton Eliminar Departamento
+        private void btnEliminarDepartamento_Click(object sender, RoutedEventArgs e)
+        {
+            Departamento d = dtgDepartamento.SelectedItem as Departamento;
+            if (d != null)
+            {
+                if (MessageBox.Show("Realmente deseas eliminar esta Departamento?", "Almacén", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (manageDepartamentos.Delete(d))
+                    {
+                        MessageBox.Show("Eliminada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        UpdateDepartamentoGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Algo salio mal...", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        //Actualizar Tabla Departamento
+        private void UpdateDepartamentoGrid()
+        {
+            dtgDepartamento.ItemsSource = null;
+            dtgDepartamento.ItemsSource = manageDepartamentos.List;
+        }
+
+        //Limpiar Valores Departamento
+        private void CleanDepartamentoValues()
+        {
+            txbDepartamentoNombre.Clear();
+            dtgUnidadesEnDepartamento.ItemsSource = null;
+            cmbUnidades.ItemsSource = null;
+        }
+        private void cmbFuncionario_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+        private void cmbDepartamento_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+        private void btnNuevoEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            CleanEdificioValues();
+            gridDetalleEdificio.IsEnabled = true;
+            ActualizarCombosEdificio();
+            edificio = new Edificio();
+            edificio.DepartamentosEnEdificio = new List<Departamento>();
+            
+            ActualizarDepartamentosEnEdificio();
+            accionEdificio = accion.New;
+        }
+
+        private void ActualizarDepartamentosEnEdificio()
+        {
+            dtgDepartamentoEnEdificio.ItemsSource = null;
+            dtgDepartamentoEnEdificio.ItemsSource = edificio.DepartamentosEnEdificio;
+        }
+
+        private void ActualizarCombosEdificio()
+        {
+            cmbDepartamento.ItemsSource = null;
+            cmbDepartamento.ItemsSource = manageDepartamentos.List;
+        }
+
+        private void btnEliminarEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            Edificio ed = dtgEdificio.SelectedItem as Edificio;
+            if (ed != null)
+            {
+                if (manageEdificios.Delete(ed))
+                {
+                    MessageBox.Show("Eliminado con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    UpdateDepartamentoGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Algo salio mal...", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+           
+        }
+
+        private void dtgEdificio_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Edificio ed = dtgEdificio.SelectedItem as Edificio;
+            if (ed != null)
+            {
+                gridDetalleEdificio.IsEnabled = true;
+                edificio = ed;
+                ActualizarDepartamentosEnEdificio();
+                accionDepartamento = accion.Edit;
+
+                txbEdificioNombre.Text = ed.NombreEdificio;
+                txbEdificioDireccion.Text = ed.DireccionEdificio;
+
+                ActualizarCombosDepartamento();
+            }
+        }
+
+        private void btnEliminarDepartamentoEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            Departamento de = dtgDepartamentoEnEdificio.SelectedItem as Departamento;
+            if (de != null)
+            {
+                edificio.DepartamentosEnEdificio.Remove(de);
+                ActualizarDepartamentosEnEdificio();
+            }
+        }
+
+        private void btnGuardarEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionEdificio == accion.New)
+            {
+
+
+                edificio.NombreEdificio = txbEdificioNombre.Text;
+                edificio.DireccionEdificio = txbEdificioDireccion.Text;
+                if (manageEdificios.Create(edificio))
+                {
+                    MessageBox.Show("Edificio guardado con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanEdificioValues();
+
+                    gridDetalleEdificio.IsEnabled = false;
+                    UpdateEdificioGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Edificio", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                departamento.NombreDepartamento = txbDepartamentoNombre.Text;
+
+
+                if (manageEdificios.Update(edificio.Id, edificio))
+                {
+                    MessageBox.Show("Edificio guardado con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanEdificioValues();
+                    gridDetalleDepartamento.IsEnabled = false;
+                    UpdateEdificioGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Edificio", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void btnCanelarEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            CleanEdificioValues();
+            gridDetalleEdificio.IsEnabled = false;
+        }
+
+        private void btnAgregarDepartamentoEdificio_Click(object sender, RoutedEventArgs e)
+        {
+            Departamento de = cmbDepartamento.SelectedItem as Departamento;
+
+            if (de != null)
+            {
+                edificio.DepartamentosEnEdificio.Add(de);
+                ActualizarDepartamentosEnEdificio();
+            }
+        }
+
+        private void UpdateEdificioGrid()
+        {
+
+            dtgEdificio.ItemsSource = null;
+            dtgEdificio.ItemsSource = manageEdificios.List;
+        }
+
+        private void CleanEdificioValues()
+        {
+            txbEdificioNombre.Clear();
+            txbEdificioDireccion.Clear();
+            dtgDepartamentoEnEdificio.ItemsSource = null;
+            cmbDepartamento.ItemsSource = null;
         }
     }
 }

@@ -8,5 +8,10 @@ namespace Inventario.COMMON.Entidades
     {
         public String NombreUnidad { get; set; }
         public List<Funcionario> FuncionariosEnUnidad { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", NombreUnidad);
+        }
     }
 }

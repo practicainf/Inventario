@@ -11,5 +11,10 @@ namespace Inventario.COMMON.Entidades
         public String DireccionEdificio { get; set; }
 
         public List<Departamento> DepartamentosEnEdificio { get; set; }
+
+        public static void ActualizarDepartamentosEnEdificio()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

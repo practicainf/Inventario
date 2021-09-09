@@ -98,7 +98,7 @@
 
 
                                     <StackPanel Orientation="Horizontal">
-                                            <Label>Equipo:</Label>
+                                            <Label>Funcionario:</Label>
                                             <ComboBox x:Name="cmbFuncionarios" Width="200"/>
                                             <Button Width="50" x:Name="btnAgregarFuncionario" Click="btnAgregarFuncionario_Click">+</Button>
                                             <Button Width="50" x:Name="btnEliminarFuncionario" Click="btnEliminarFuncionario_Click">-</Button>
@@ -116,7 +116,122 @@
                         </Grid>
                     
                 </TabItem>
-                
+                <!--Gestion Departamento-->
+                <TabItem Header="Departamento">
+                    
+                        <Grid Background="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                <Label Grid.Row="0">Departamentos de Trabajo</Label>
+                                    <WrapPanel Grid.Row="1">
+                                    <Button x:Name="btnNuevoDepartamento" Click="btnNuevoDepartamento_Click">Nuevo</Button>
+                                    <Button x:Name="btnEliminarDepartamento" Click="btnEliminarDepartamento_Click">Eliminar</Button>
+                                    </WrapPanel>
+                                    <DataGrid Grid.Row="2" x:Name="dtgDepartamento" IsReadOnly="True" MouseDoubleClick="dtgDepartamento_MouseDoubleClick"></DataGrid>
+                                </Grid>
+                                <Grid Grid.Column="1" x:Name="gridDetalleDepartamento">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal"/>
+                                <WrapPanel Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock >Nombre</TextBlock>
+                                        <TextBox x:Name="txbDepartamentoNombre" Width="100"></TextBox>
+                                    </StackPanel>
+
+
+                                    <StackPanel Orientation="Horizontal">
+                                            <Label>Unidad:</Label>
+                                            <ComboBox x:Name="cmbUnidades" Width="200"/>
+                                        <Button Width="50" x:Name="btnAgregarUnidad" Click="btnAgregarUnidad_Click">+</Button>
+                                            <Button Width="50" x:Name="btnEliminarUnidadDepartamento" Click="btnEliminarUnidadDepartamento_Click">-</Button>
+                                        </StackPanel>
+                                    </WrapPanel>
+                                <DataGrid x:Name="dtgUnidadesEnDepartamento" Grid.Row="2" IsReadOnly="True"></DataGrid>
+                                    <StackPanel Grid.Row="3">
+
+                                    <Button x:Name="btnGuardarDepartamento" Click="btnGuardarDepartamento_Click">Guardar</Button>
+                                        <Button x:Name="btnCanelarDepartamento" Click="btnCanelarDepartamento_Click">Cancelar</Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
+                    
+                </TabItem>
+                <!--Gestion Edificio-->
+                <TabItem Header="Departamento">
+
+                    <Grid Background="White">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0">Edificios Municipales</Label>
+                                <WrapPanel Grid.Row="1">
+                                    <Button x:Name="btnNuevoEdificio" Click="btnNuevoEdificio_Click">Nuevo</Button>
+                                    <Button x:Name="btnEliminarEdificio" Click="btnEliminarEdificio_Click">Eliminar</Button>
+                                </WrapPanel>
+                                <DataGrid Grid.Row="2" x:Name="dtgEdificio" IsReadOnly="True" MouseDoubleClick="dtgEdificio_MouseDoubleClick"></DataGrid>
+                            </Grid>
+                            <Grid Grid.Column="1" x:Name="gridDetalleEdificio">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal"/>
+                                <WrapPanel Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock >Nombre</TextBlock>
+                                        <TextBox x:Name="txbEdificioNombre" Width="100"></TextBox>
+                                    </StackPanel><StackPanel Orientation="Horizontal">
+                                        <TextBlock >Direccion</TextBlock>
+                                        <TextBox x:Name="txbEdificioDireccion" Width="100"></TextBox>
+                                    </StackPanel>
+
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label>Unidad:</Label>
+                                        <ComboBox x:Name="cmbDepartamento" Width="200" SelectionChanged="cmbDepartamento_SelectionChanged"/>
+                                        <Button Width="50" x:Name="btnAgregarDepartamentoEdificio" Click="btnAgregarDepartamentoEdificio_Click">+</Button>
+                                        <Button Width="50" x:Name="btnEliminarDepartamentoEdificio" Click="btnEliminarDepartamentoEdificio_Click">-</Button>
+                                    </StackPanel>
+                                </WrapPanel>
+                                <DataGrid x:Name="dtgDepartamentoEnEdificio" Grid.Row="2" IsReadOnly="True"></DataGrid>
+                                <StackPanel Grid.Row="3">
+
+                                    <Button x:Name="btnGuardarEdificio" Click="btnGuardarEdificio_Click">Guardar</Button>
+                                    <Button x:Name="btnCanelarEdificio" Click="btnCanelarEdificio_Click">Cancelar</Button>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+
+                </TabItem>
+
             </TabControl>
         </TabItem>
         
