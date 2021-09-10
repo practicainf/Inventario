@@ -38,12 +38,17 @@ namespace Inventario.GUI.Admin
         IManageUnidad manageUnidad;
         IManageDepartamentos manageDepartamentos;
         IManageEdificios manageEdificios;
+        IManagePantallas managePantallas;
+        IManageOrdenador manageOrdenadors;
+
         accion accionFunc;
         accion accionEquip;
         accion accionTicket;
         accion accionUnidad;
         accion accionDepartamento;
         accion accionEdificio;
+        accion accionPantalla;
+        accion accionOrdenador;
 
         Ticket ticket;
         Unidad unidad;
@@ -57,6 +62,8 @@ namespace Inventario.GUI.Admin
             InitializeComponent();
 
             manageEquipos = new ManageEquipos(new REquipo());
+            managePantallas = new ManagePantallas(new RPantalla());
+            manageOrdenadors = new ManageOrdenador(new ROrdenador());
             manageFuncionarios = new ManageFuncionarios(new RFuncionario());
             manageTickets = new ManageTickets(new RTicket());
             manageUnidad = new ManageUnidads(new RUnidad());
@@ -66,10 +73,19 @@ namespace Inventario.GUI.Admin
             EditFuncBtns(false);
             CleanFuncValues();
             UpdateFuncGrid();
-
+            
             EditEquipBtns(false);
             CleanEquipValues();
             UpdateEquipGrid();
+            
+            EditOrdenadorBtns(false);
+            CleanOrdenadorValues();
+            UpdateOrdenadorGrid();
+
+            EditPantallaBtns(false);
+            CleanPantallaValues();
+            UpdatePantallaGrid();
+
 
             CleanUnidadValues();
             UpdateUnidadGrid();
@@ -80,7 +96,8 @@ namespace Inventario.GUI.Admin
             CleanEdificioValues();
             UpdateEdificioGrid();
 
-
+            txbPantallasCategoria.IsEnabled = false;
+            txbOrdenadorCategoria.IsEnabled = false;
 
 
             UpdateTicketGrid();
@@ -439,7 +456,7 @@ namespace Inventario.GUI.Admin
             Equipo eq = dtgEquipos.SelectedItem as Equipo;
             if (eq != null)
             {
-                txbEquiposId.Text = eq.Id;
+                
                 txbEquiposNombre.Text = eq.Nombre;
                 txbEquiposCategoria.Text = eq.Tipo;
                 txbEquiposMarca.Text = eq.Marca;
@@ -458,13 +475,15 @@ namespace Inventario.GUI.Admin
                     Tipo = txbEquiposCategoria.Text,
                     Nombre = txbEquiposNombre.Text,
                     Marca = txbEquiposMarca.Text,
-                    Estado = txbEquiposEstado.Text
+                    Estado = txbEquiposEstado.Text,
                 };
                 if (manageEquipos.Create(eq))
                 {
                     MessageBox.Show("Equipo correctamente agregado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
                     CleanEquipValues();
                     UpdateEquipGrid();
+                    UpdatePantallaGrid();
+                    UpdateOrdenadorGrid();
                     EditEquipBtns(false);
                 }
                 else
@@ -474,7 +493,7 @@ namespace Inventario.GUI.Admin
             }
             else
             {
-                Equipo eq = dtgEquipos.SelectedItem as Equipo;
+                Equipo eq = dtgPantallas.SelectedItem as Equipo;
                 eq.Tipo = txbEquiposCategoria.Text;
                 eq.Nombre = txbEquiposNombre.Text;
                 eq.Marca = txbEquiposMarca.Text;
@@ -484,6 +503,9 @@ namespace Inventario.GUI.Admin
                     MessageBox.Show("Equipo correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
                     CleanEquipValues();
                     UpdateEquipGrid();
+
+                    UpdatePantallaGrid();
+                    UpdateOrdenadorGrid();
                     EditEquipBtns(false);
                 }
                 else
@@ -513,6 +535,8 @@ namespace Inventario.GUI.Admin
                     {
                         MessageBox.Show("Equipo Eliminado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
                         UpdateEquipGrid();
+                        UpdateOrdenadorGrid();
+                        UpdatePantallaGrid();
                     }
                     else
                     {
@@ -527,6 +551,7 @@ namespace Inventario.GUI.Admin
         private void UpdateEquipGrid()
         {
             dtgEquipos.ItemsSource = null;
+            //dtgPantallas.ItemsSource = manageEquipos.ListarPantallas("Pantallas");
             dtgEquipos.ItemsSource = manageEquipos.List;
         }
 
@@ -534,7 +559,7 @@ namespace Inventario.GUI.Admin
         private void CleanEquipValues()
         {
             txbEquiposCategoria.Clear();
-            txbEquiposId.Text = "";
+            
             txbEquiposNombre.Clear();
             txbEquiposMarca.Clear();
             txbEquiposEstado.Clear();
@@ -544,6 +569,7 @@ namespace Inventario.GUI.Admin
         //Botones Edicion Equipos
         private void EditEquipBtns(bool value)
         {
+            
             btnEquiposCancelar.IsEnabled = value;
             btnEquiposEditar.IsEnabled = !value;
             btnEquiposEliminar.IsEnabled = !value;
@@ -560,7 +586,340 @@ namespace Inventario.GUI.Admin
 
 
 
-                
+
+        //Boton Nuevo Ordenador
+        private void btnOrdenadorNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            CleanOrdenadorValues();
+            accionEquip = accion.New;
+            EditOrdenadorBtns(true);
+
+
+        }
+
+        //Boton Editar Ordenador
+        private void btnOrdenadorEditar_Click(object sender, RoutedEventArgs e)
+        {
+            CleanOrdenadorValues();
+            accionEquip = accion.Edit;
+            EditOrdenadorBtns(true);
+            Ordenador eq = dtgOrdenador.SelectedItem as Ordenador;
+            if (eq != null)
+            {
+
+                txbOrdenadorNombre.Text = eq.Nombre;
+                txbOrdenadorCategoria.Text = eq.Tipo;
+                txbOrdenadorMarca.Text = eq.Marca;
+                txbOrdenadorEstado.Text = eq.Estado;
+                txbOrdenadorHost.Text = eq.Host;
+                txbTipoOrdenador.Text = eq.Tipo;
+                txbOrdenadorProcesador.Text = eq.Procesador;
+                txbOrdenadorNucleos.Text = eq.Nucleos;
+                txbOrdenadorRam.Text = eq.Ram;
+                txbOrdenadorAlmacenamiento.Text = eq.Almacenamiento;
+                txbOrdenadorMACLAN.Text = eq.MACLAN;
+                txbOrdenadorMACWIFI.Text = eq.MACWIFI;
+            }
+
+        }
+
+        //Boton Guardar Ordenador
+        private void btnOrdenadorGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionEquip == accion.New)
+            {
+                Ordenador eq = new Ordenador()
+                {
+                    Tipo = "Ordenador",
+                    Nombre = txbOrdenadorNombre.Text,
+                    Marca = txbOrdenadorMarca.Text,
+                    Estado = txbOrdenadorEstado.Text,
+                    Host = txbOrdenadorHost.Text,
+                    TipoOrdenador = txbTipoOrdenador.Text,
+                    Procesador = txbOrdenadorProcesador.Text,
+                    Nucleos = txbOrdenadorNucleos.Text,
+                    Ram = txbOrdenadorRam.Text,
+                    Almacenamiento = txbOrdenadorAlmacenamiento.Text,
+                    MACLAN = txbOrdenadorMACLAN.Text,
+                    MACWIFI = txbOrdenadorMACWIFI.Text
+
+                };
+                if (manageEquipos.Create(eq))
+                {
+                    MessageBox.Show("Ordenador correctamente agregado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanOrdenadorValues();
+                    UpdateOrdenadorGrid();
+                    UpdateEquipGrid();
+                    EditOrdenadorBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                Ordenador eq = dtgOrdenador.SelectedItem as Ordenador;
+                eq.Tipo = txbOrdenadorCategoria.Text;
+                eq.Nombre = txbOrdenadorNombre.Text;
+                eq.Marca = txbOrdenadorMarca.Text;
+                eq.Estado = txbOrdenadorEstado.Text;
+                eq.Host = txbOrdenadorHost.Text;
+                eq.TipoOrdenador = txbTipoOrdenador.Text;
+                eq.Procesador = txbOrdenadorProcesador.Text;
+                eq.Nucleos = txbOrdenadorNucleos.Text;
+                eq.Ram = txbOrdenadorRam.Text;
+                eq.Almacenamiento = txbOrdenadorAlmacenamiento.Text;
+                eq.MACLAN = txbOrdenadorMACLAN.Text;
+                eq.MACWIFI = txbOrdenadorMACWIFI.Text;
+                if (manageEquipos.Update(eq.Id, eq))
+                {
+                    MessageBox.Show("Ordenador correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanOrdenadorValues();
+                    UpdateEquipGrid();
+                    UpdateOrdenadorGrid();
+                    EditOrdenadorBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Ordenador
+        private void btnOrdenadorCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            CleanOrdenadorValues();
+            EditOrdenadorBtns(false);
+
+        }
+
+        //Boton Eliminar Ordenador
+        private void btnOrdenadorEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            Ordenador eq = dtgOrdenador.SelectedItem as Ordenador;
+            if (eq != null)
+            {
+                if (MessageBox.Show("¿Realmente deseas eliminar este Ordenador?", "Inventarios", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (manageEquipos.Delete(eq))
+                    {
+                        MessageBox.Show("Ordenador Eliminado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UpdateOrdenadorGrid();
+                        UpdateEquipGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+
+        }
+
+        //Actualizar Tabla de Ordenador
+        private void UpdateOrdenadorGrid()
+        {
+            dtgOrdenador.ItemsSource = null;
+            dtgOrdenador.ItemsSource = manageEquipos.ListarOrdenador("Ordenador");
+        }
+
+        //Limpiar Valores Ordenador
+        private void CleanOrdenadorValues()
+        {
+            txbOrdenadorCategoria.Text = "Ordenador";
+
+            txbOrdenadorNombre.Clear();
+            txbOrdenadorMarca.Clear();
+            txbOrdenadorEstado.Clear();
+            txbOrdenadorHost.Clear();
+            txbTipoOrdenador.Clear();
+            txbOrdenadorProcesador.Clear();
+            txbOrdenadorNucleos.Clear();
+            txbOrdenadorRam.Clear();
+            txbOrdenadorAlmacenamiento.Clear();
+            txbOrdenadorMACLAN.Clear();
+            txbOrdenadorMACWIFI.Clear();
+
+
+        }
+
+        //Botones Edicion Ordenador
+        private void EditOrdenadorBtns(bool value)
+        {
+
+            btnOrdenadorCancelar.IsEnabled = value;
+            btnOrdenadorEditar.IsEnabled = !value;
+            btnOrdenadorEliminar.IsEnabled = !value;
+            btnOrdenadorGuardar.IsEnabled = value;
+            btnOrdenadorNuevo.IsEnabled = !value;
+
+        }
+
+
+
+
+
+
+
+
+
+
+        //Boton Nuevo Pantalla
+        private void btnPantallasNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            CleanPantallaValues();
+            accionPantalla = accion.New;
+            EditPantallaBtns(true);
+
+
+        }
+
+        //Boton Editar Pantalla
+        private void btnPantallasEditar_Click(object sender, RoutedEventArgs e)
+        {
+            CleanPantallaValues();
+            accionPantalla = accion.Edit;
+            EditPantallaBtns(true);
+            Pantalla eq = dtgPantallas.SelectedItem as Pantalla;
+            if (eq != null)
+            {
+
+                txbPantallasNombre.Text = eq.Nombre;
+                txbPantallasCategoria.Text = eq.Tipo;
+                txbPantallasMarca.Text = eq.Marca;
+                txbPantallasEstado.Text = eq.Estado;
+                txbPantallasPulgadas.Text = eq.Pulgadas;
+            }
+
+        }
+
+        //Boton Guardar Pantalla
+        private void btnPantallasGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionPantalla == accion.New)
+            {
+                Pantalla eq = new Pantalla()
+                {
+                    Tipo = "Pantalla",
+                    Nombre = txbPantallasNombre.Text,
+                    Marca = txbPantallasMarca.Text,
+                    Estado = txbPantallasEstado.Text,
+                    Pulgadas = txbPantallasPulgadas.Text,
+                    SN = txbPantallasSN.Text
+                };
+                if (manageEquipos.Create(eq))
+                {
+                    MessageBox.Show("Pantalla correctamente agregado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanPantallaValues();
+                    UpdatePantallaGrid();
+                    UpdateEquipGrid();
+                    EditPantallaBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                Pantalla eq = dtgPantallas.SelectedItem as Pantalla;
+                eq.Tipo = txbPantallasCategoria.Text;
+                eq.Nombre = txbPantallasNombre.Text;
+                eq.Marca = txbPantallasMarca.Text;
+                eq.Estado = txbPantallasEstado.Text;
+                eq.Pulgadas = txbPantallasPulgadas.Text;
+                eq.SN = txbPantallasSN.Text;
+                if (manageEquipos.Update(eq.Id, eq))
+                {
+                    MessageBox.Show("Pantalla correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanPantallaValues();
+                    UpdatePantallaGrid();
+                    UpdateEquipGrid();
+                    EditPantallaBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Pantalla
+        private void btnPantallasCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            CleanPantallaValues();
+            EditPantallaBtns(false);
+
+        }
+
+        //Boton Eliminar Pantalla
+        private void btnPantallasEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            Pantalla eq = dtgPantallas.SelectedItem as Pantalla;
+            if (eq != null)
+            {
+                if (MessageBox.Show("¿Realmente deseas eliminar este Pantalla?", "Inventarios", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (manageEquipos.Delete(eq))
+                    {
+                        MessageBox.Show("Pantalla Eliminado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UpdatePantallaGrid();
+                        UpdateEquipGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+
+        }
+
+        //Actualizar Tabla de Pantallas
+        private void UpdatePantallaGrid()
+        {
+            dtgPantallas.ItemsSource = null;
+            dtgPantallas.ItemsSource = manageEquipos.ListarPantallas("Pantallas");
+            //dtgPantallas.ItemsSource = manageEquipos.List;
+        }
+
+        //Limpiar Valores Pantalla
+        private void CleanPantallaValues()
+        {
+            txbPantallasCategoria.Text = "Pantalla";
+
+            txbPantallasNombre.Clear();
+            txbPantallasMarca.Clear();
+            txbPantallasEstado.Clear();
+            txbPantallasPulgadas.Clear();
+            txbPantallasSN.Clear();
+
+        }
+
+        //Botones Edicion Pantallas
+        private void EditPantallaBtns(bool value)
+        {
+
+            btnPantallasCancelar.IsEnabled = value;
+            btnPantallasEditar.IsEnabled = !value;
+            btnPantallasEliminar.IsEnabled = !value;
+            btnPantallasGuardar.IsEnabled = value;
+            btnPantallasNuevo.IsEnabled = !value;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
         //Boton Guardar Unidad
         private void btnGuardarUnidad_Click(object sender, RoutedEventArgs e)
         {
@@ -1040,5 +1399,155 @@ namespace Inventario.GUI.Admin
             dtgDepartamentoEnEdificio.ItemsSource = null;
             cmbDepartamento.ItemsSource = null;
         }
+
+        private void dtgOrdenador_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+        //Boton Nuevo Pantalla
+        /// <summary>
+        /// /
+
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void btnPantallasNuevo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CleanEquipValues();
+        //    accionEquip = accion.New;
+        //    EditEquipBtns(true);
+
+
+        //}
+
+        ////Boton Editar Pantalla
+        //private void btnEquiposEditar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CleanEquipValues();
+        //    accionEquip = accion.Edit;
+        //    EditEquipBtns(true);
+        //    Equipo eq = dtgEquipos.SelectedItem as Equipo;
+        //    if (eq != null)
+        //    {
+        //        txbEquiposId.Text = eq.Id;
+        //        txbEquiposNombre.Text = eq.Nombre;
+        //        txbEquiposCategoria.Text = eq.Tipo;
+        //        txbEquiposMarca.Text = eq.Marca;
+        //        txbEquiposEstado.Text = eq.Estado;
+        //    }
+
+        //}
+
+        ////Boton Guardar Pantalla
+        //private void btnEquiposGuardar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (accionEquip == accion.New)
+        //    {
+        //        Equipo eq = new Equipo()
+        //        {
+        //            Tipo = txbEquiposCategoria.Text,
+        //            Nombre = txbEquiposNombre.Text,
+        //            Marca = txbEquiposMarca.Text,
+        //            Estado = txbEquiposEstado.Text
+        //        };
+        //        if (manageEquipos.Create(eq))
+        //        {
+        //            MessageBox.Show("Equipo correctamente agregado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+        //            CleanEquipValues();
+        //            UpdateEquipGrid();
+        //            EditEquipBtns(false);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Equipo eq = dtgEquipos.SelectedItem as Equipo;
+        //        eq.Tipo = txbEquiposCategoria.Text;
+        //        eq.Nombre = txbEquiposNombre.Text;
+        //        eq.Marca = txbEquiposMarca.Text;
+        //        eq.Estado = txbEquiposEstado.Text;
+        //        if (manageEquipos.Update(eq.Id, eq))
+        //        {
+        //            MessageBox.Show("Equipo correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+        //            CleanEquipValues();
+        //            UpdateEquipGrid();
+        //            EditEquipBtns(false);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //}
+
+        ////Boton Cancelar Pantalla
+        //private void btnEquiposCancelar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CleanEquipValues();
+        //    EditEquipBtns(false);
+
+        //}
+
+        ////Boton Eliminar Pantalla
+        //private void btnEquiposEliminar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Equipo eq = dtgEquipos.SelectedItem as Equipo;
+        //    if (eq != null)
+        //    {
+        //        if (MessageBox.Show("¿Realmente deseas eliminar este Equipo?", "Inventarios", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+        //        {
+        //            if (manageEquipos.Delete(eq))
+        //            {
+        //                MessageBox.Show("Equipo Eliminado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+        //                UpdateEquipGrid();
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("Algo salio mal", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //        }
+        //    }
+
+        //}
+
+        ////Actualizar Tabla de Pantalla
+        //private void UpdateEquipGrid()
+        //{
+        //    dtgEquipos.ItemsSource = null;
+        //    dtgEquipos.ItemsSource = manageEquipos.List;
+        //}
+
+        ////Limpiar Valores Pantalla
+        //private void CleanEquipValues()
+        //{
+        //    txbEquiposCategoria.Clear();
+        //    txbEquiposId.Text = "";
+        //    txbEquiposNombre.Clear();
+        //    txbEquiposMarca.Clear();
+        //    txbEquiposEstado.Clear();
+
+        //}
+
+        ////Botones Edicion Pantalla
+        //private void EditEquipBtns(bool value)
+        //{
+        //    btnEquiposCancelar.IsEnabled = value;
+        //    btnEquiposEditar.IsEnabled = !value;
+        //    btnEquiposEliminar.IsEnabled = !value;
+        //    btnEquiposGuardar.IsEnabled = value;
+        //    btnEquiposNuevo.IsEnabled = !value;
+
+        //}
     }
 }

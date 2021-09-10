@@ -1,6 +1,7 @@
 ﻿using Inventario.COMMON.Entidades;
 using Inventario.COMMON.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,15 @@ namespace Inventario.BIZ
             return repositorio.Delete(entidad);
         }
 
-        
+        public IEnumerable ListarOrdenador(string v)
+        {
+            return repositorio.Read.Where(p => p.Tipo == "Ordenador");
+        }
+
+        public IEnumerable ListarPantallas(string v)
+        {
+            return repositorio.Read.Where(p => p.Tipo == "Pantalla");
+        }
 
         public Equipo Search(string id)
         {

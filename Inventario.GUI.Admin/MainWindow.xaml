@@ -236,45 +236,169 @@
         </TabItem>
         
         <!--Equipos-->
-        <TabItem Header="Equipos" Height="20" VerticalAlignment="Bottom">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <WrapPanel Grid.Row="0">
-                    <Button x:Name="btnEquiposNuevo" Click="btnEquiposNuevo_Click" >Nuevo</Button>
-                    <Button x:Name="btnEquiposEditar" Click="btnEquiposEditar_Click" >Editar</Button>
-                    <Button x:Name="btnEquiposGuardar" Click="btnEquiposGuardar_Click">Guardar</Button>
-                    <Button x:Name="btnEquiposCancelar"  Click="btnEquiposCancelar_Click">Cancelar</Button>
-                    <Button x:Name="btnEquiposEliminar" Click="btnEquiposEliminar_Click" >Eliminar</Button>
-                </WrapPanel>
-                <WrapPanel Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Id:</TextBlock>
-                        <TextBlock x:Name="txbEquiposId"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Nombre:</TextBlock>
-                        <TextBox x:Name="txbEquiposNombre" Width="150"></TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Tipo:</TextBlock>
-                        <TextBox x:Name="txbEquiposCategoria" Width="150"></TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Marca:</TextBlock>
-                        <TextBox x:Name="txbEquiposMarca" Width="150"></TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Estado:</TextBlock>
-                        <TextBox x:Name="txbEquiposEstado" Width="150"></TextBox>
-                    </StackPanel>
+        <TabItem Header="Equipos">
+            <TabControl>
 
-                </WrapPanel>
-                <DataGrid x:Name="dtgEquipos" Grid.Row="3" IsReadOnly="True"/>
-            </Grid>
+                <!--Gestion de Equipos-->
+                <TabItem Header="Equipos">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button x:Name="btnEquiposNuevo" Click="btnEquiposNuevo_Click" >Nuevo</Button>
+                            <Button x:Name="btnEquiposEditar" Click="btnEquiposEditar_Click" >Editar</Button>
+                            <Button x:Name="btnEquiposGuardar" Click="btnEquiposGuardar_Click">Guardar</Button>
+                            <Button x:Name="btnEquiposCancelar"  Click="btnEquiposCancelar_Click">Cancelar</Button>
+                            <Button x:Name="btnEquiposEliminar" Click="btnEquiposEliminar_Click" >Eliminar</Button>
+                        </WrapPanel>
+                        <WrapPanel Grid.Row="1">
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Modelo:</TextBlock>
+                                <TextBox x:Name="txbEquiposNombre" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Tipo:</TextBlock>
+                                <TextBox x:Name="txbEquiposCategoria" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Marca:</TextBlock>
+                                <TextBox x:Name="txbEquiposMarca" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Estado:</TextBlock>
+                                <TextBox x:Name="txbEquiposEstado" Width="150"></TextBox>
+                            </StackPanel>
+                            
+
+                        </WrapPanel>
+                        <DataGrid x:Name="dtgEquipos" Grid.Row="3" IsReadOnly="True"/>
+                    </Grid>
+                </TabItem>
+
+                <!--Gestion de Ordenador-->
+                <TabItem Header="Ordenador">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button x:Name="btnOrdenadorNuevo" Click="btnOrdenadorNuevo_Click" >Nuevo</Button>
+                            <Button x:Name="btnOrdenadorEditar" Click="btnOrdenadorEditar_Click" >Editar</Button>
+                            <Button x:Name="btnOrdenadorGuardar" Click="btnOrdenadorGuardar_Click">Guardar</Button>
+                            <Button x:Name="btnOrdenadorCancelar"  Click="btnOrdenadorCancelar_Click">Cancelar</Button>
+                            <Button x:Name="btnOrdenadorEliminar" Click="btnOrdenadorEliminar_Click" >Eliminar</Button>
+                        </WrapPanel>
+                        <WrapPanel Grid.Row="1">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Modelo:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorNombre" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Tipo:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorCategoria" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Marca:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorMarca" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Estado:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorEstado" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Host:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorHost" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Tipo Ordenador:</TextBlock>
+                                <TextBox x:Name="txbTipoOrdenador" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Procesador:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorProcesador" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Nucleos:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorNucleos" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Ram:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorRam" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Almacenamiento:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorAlmacenamiento" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>MACLAN:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorMACLAN" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>MACWIFI:</TextBlock>
+                                <TextBox x:Name="txbOrdenadorMACWIFI" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+
+                        </WrapPanel>
+                        <DataGrid x:Name="dtgOrdenador" Grid.Row="3" IsReadOnly="True" SelectionChanged="dtgOrdenador_SelectionChanged"/>
+                    </Grid>
+                </TabItem>
+
+                <!--Gestion de Pantallas-->
+                <TabItem Header="Pantallas">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button x:Name="btnPantallasNuevo" Click="btnPantallasNuevo_Click" >Nuevo</Button>
+                            <Button x:Name="btnPantallasEditar" Click="btnPantallasEditar_Click" >Editar</Button>
+                            <Button x:Name="btnPantallasGuardar" Click="btnPantallasGuardar_Click">Guardar</Button>
+                            <Button x:Name="btnPantallasCancelar"  Click="btnPantallasCancelar_Click">Cancelar</Button>
+                            <Button x:Name="btnPantallasEliminar" Click="btnPantallasEliminar_Click" >Eliminar</Button>
+                        </WrapPanel>
+                        <WrapPanel Grid.Row="1">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Modelo:</TextBlock>
+                                <TextBox x:Name="txbPantallasNombre" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Tipo:</TextBlock>
+                                <TextBox x:Name="txbPantallasCategoria" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Marca:</TextBlock>
+                                <TextBox x:Name="txbPantallasMarca" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Estado:</TextBlock>
+                                <TextBox x:Name="txbPantallasEstado" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Pulgadas:</TextBlock>
+                                <TextBox x:Name="txbPantallasPulgadas" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>S/N:</TextBlock>
+                                <TextBox x:Name="txbPantallasSN" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
+                            </StackPanel>
+
+                        </WrapPanel>
+                        <DataGrid x:Name="dtgPantallas" Grid.Row="3" IsReadOnly="True"/>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
         </TabItem>
         
         <!--Reportes-->
