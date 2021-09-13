@@ -33,6 +33,7 @@ namespace Inventario.GUI.Admin
         }
 
         IManageFuncionarios manageFuncionarios;
+        IManageIP manageIPs;
         IManageEquipos manageEquipos;
         IManageTickets manageTickets;
         IManageUnidad manageUnidad;
@@ -42,6 +43,7 @@ namespace Inventario.GUI.Admin
         IManageOrdenador manageOrdenadors;
 
         accion accionFunc;
+        accion accionIP;
         accion accionEquip;
         accion accionTicket;
         accion accionUnidad;
@@ -50,10 +52,13 @@ namespace Inventario.GUI.Admin
         accion accionPantalla;
         accion accionOrdenador;
 
+        Equipo equipo;
+        Ordenador ordenador;
         Ticket ticket;
         Unidad unidad;
         Departamento departamento;
         Edificio edificio;
+        IP ip;
 
 
 
@@ -69,6 +74,8 @@ namespace Inventario.GUI.Admin
             manageUnidad = new ManageUnidads(new RUnidad());
             manageDepartamentos = new ManageDepartamentos(new RDepartamento());
             manageEdificios = new ManageEdificios(new REdificio());
+            manageIPs = new ManageIP(new RIP());
+                
 
             EditFuncBtns(false);
             CleanFuncValues();
@@ -86,6 +93,9 @@ namespace Inventario.GUI.Admin
             CleanPantallaValues();
             UpdatePantallaGrid();
 
+            EditIPBtns(false);
+            CleanIPValues();
+            UpdateIPGrid();
 
             CleanUnidadValues();
             UpdateUnidadGrid();
@@ -437,9 +447,141 @@ namespace Inventario.GUI.Admin
 
 
 
+        //Actualizar Tabla IP
+        private void UpdateIPGrid()
+        {
+            dtgIP.ItemsSource = null;
+            dtgIP.ItemsSource = manageIPs.List;
+
+        }
+
+        //Limpiar Valores IP
+        private void CleanIPValues()
+        {
+            txbIPDireccion.Text = "";
+
+        }
+
+        //Botones Edicion IP
+        private void EditIPBtns(bool value)
+        {
+            btnIPCancelar.IsEnabled = value;
+            btnIPEditar.IsEnabled = !value;
+            btnIPEliminar.IsEnabled = !value;
+            btnIPGuardar.IsEnabled = value;
+            btnIPNuevo.IsEnabled = !value;
+
+
+        }
+
+        //Boton Nuevo IP
+        private void btnIPNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            CleanIPValues();
+            EditIPBtns(true);
+            accionIP = accion.New;
+        }
+
+        //Boton Editar IP
+        private void btnIPEditar_Click(object sender, RoutedEventArgs e)
+        {
+            IP ip = dtgIP.SelectedItem as IP;
+            if (ip != null)
+            {
+                txbIPDireccion.Text = ip.DireccionIP;
+            }
+            ActualizarCombosIP();
+
+        }
+
+        //Boton Guardar IP
+        private void btnIPGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionIP == accion.New)
+            {
+                IP ip = new IP()
+                {
+                    DireccionIP = txbIPDireccion.Text,
+                    Estado = "DISPONIBLE"
+                };
+                if (manageIPs.Create(ip))
+                {
+                    MessageBox.Show("IP agregado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanIPValues();
+                    UpdateIPGrid();
+                    EditIPBtns(false);
+                    ActualizarCombosIP();
+                }
+                else
+                {
+                    MessageBox.Show("El IP no se pudo agregar", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                IP ip = dtgIP.SelectedItem as IP;
+                ip.DireccionIP = txbIPDireccion.Text;
+                if (manageIPs.Update(ip.Id, ip))
+                {
+                    MessageBox.Show("IP modificado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanIPValues();
+                    UpdateIPGrid();
+                    EditIPBtns(false);
+                    ActualizarCombosIP();
+                }
+                else
+                {
+                    MessageBox.Show("El IP no se pudo actualizar", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar IP
+        private void btnIPCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            CleanIPValues();
+            EditIPBtns(false);
+        }
+
+        //Boton Eliminar IP
+        private void btnIPEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            {
+                IP ip = dtgIP.SelectedItem as IP;
+                if (ip != null)
+                {
+                    if (MessageBox.Show("¿Realmente desea eliminar este IP?", "Inventarios", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        if (manageIPs.Delete(ip))
+                        {
+                            MessageBox.Show("IP eliminado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                            UpdateIPGrid();
+                            ActualizarCombosIP();
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo eliminar el IP", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        
+
+
+
+
+
+
+
+
         //Boton Nuevo Equipo
         private void btnEquiposNuevo_Click(object sender, RoutedEventArgs e)
         {
+            ActualizarCombosIP();
             CleanEquipValues();
             accionEquip = accion.New;
             EditEquipBtns(true);
@@ -578,6 +720,14 @@ namespace Inventario.GUI.Admin
 
         }
 
+        //Actualizar ComboBoxIP
+        private void ActualizarCombosIP()
+        {
+
+            cmbOrdenadorIP.ItemsSource = null;
+            cmbOrdenadorIP.ItemsSource = manageIPs.ListarIpDispo();
+
+        }
 
 
 
@@ -593,6 +743,7 @@ namespace Inventario.GUI.Admin
             CleanOrdenadorValues();
             accionEquip = accion.New;
             EditOrdenadorBtns(true);
+            ActualizarCombosIP();
 
 
         }
@@ -602,6 +753,7 @@ namespace Inventario.GUI.Admin
         {
             CleanOrdenadorValues();
             accionEquip = accion.Edit;
+            ActualizarCombosIP();
             EditOrdenadorBtns(true);
             Ordenador eq = dtgOrdenador.SelectedItem as Ordenador;
             if (eq != null)
@@ -619,6 +771,11 @@ namespace Inventario.GUI.Admin
                 txbOrdenadorAlmacenamiento.Text = eq.Almacenamiento;
                 txbOrdenadorMACLAN.Text = eq.MACLAN;
                 txbOrdenadorMACWIFI.Text = eq.MACWIFI;
+                if(eq.DireccionIP != null)
+                {
+                    cmbOrdenadorIP.Text = eq.DireccionIP.ToString();
+                }
+                
             }
 
         }
@@ -629,21 +786,25 @@ namespace Inventario.GUI.Admin
             if (accionEquip == accion.New)
             {
                 Ordenador eq = new Ordenador()
-                {
+                {                                         
                     Tipo = "Ordenador",
                     Nombre = txbOrdenadorNombre.Text,
                     Marca = txbOrdenadorMarca.Text,
                     Estado = txbOrdenadorEstado.Text,
                     Host = txbOrdenadorHost.Text,
+                    DireccionIP = cmbOrdenadorIP.SelectedItem as IP,
                     TipoOrdenador = txbTipoOrdenador.Text,
                     Procesador = txbOrdenadorProcesador.Text,
                     Nucleos = txbOrdenadorNucleos.Text,
                     Ram = txbOrdenadorRam.Text,
                     Almacenamiento = txbOrdenadorAlmacenamiento.Text,
                     MACLAN = txbOrdenadorMACLAN.Text,
-                    MACWIFI = txbOrdenadorMACWIFI.Text
+                    MACWIFI = txbOrdenadorMACWIFI.Text                  
 
                 };
+
+                
+                
                 if (manageEquipos.Create(eq))
                 {
                     MessageBox.Show("Ordenador correctamente agregado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -672,6 +833,7 @@ namespace Inventario.GUI.Admin
                 eq.Almacenamiento = txbOrdenadorAlmacenamiento.Text;
                 eq.MACLAN = txbOrdenadorMACLAN.Text;
                 eq.MACWIFI = txbOrdenadorMACWIFI.Text;
+                eq.DireccionIP = cmbOrdenadorIP.SelectedItem as IP;
                 if (manageEquipos.Update(eq.Id, eq))
                 {
                     MessageBox.Show("Ordenador correctamente modificado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);

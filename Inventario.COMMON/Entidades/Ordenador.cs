@@ -8,6 +8,7 @@ namespace Inventario.COMMON.Entidades
     {
 
         public String Host { get; set; }
+        public IP? DireccionIP { get; set; }
         public String TipoOrdenador { get; set; }
         public String Procesador { get; set; }
         public String Nucleos { get; set; }

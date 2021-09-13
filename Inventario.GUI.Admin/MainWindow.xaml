@@ -116,6 +116,7 @@
                         </Grid>
                     
                 </TabItem>
+                
                 <!--Gestion Departamento-->
                 <TabItem Header="Departamento">
                     
@@ -172,6 +173,7 @@
                         </Grid>
                     
                 </TabItem>
+                
                 <!--Gestion Edificio-->
                 <TabItem Header="Departamento">
 
@@ -317,6 +319,10 @@
                                 <TextBox x:Name="txbOrdenadorHost" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
+                                <TextBlock>IP:</TextBlock>
+                                <ComboBox x:Name="cmbOrdenadorIP" Width="150" RenderTransformOrigin="-0.583,-4.334"></ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
                                 <TextBlock>Tipo Ordenador:</TextBlock>
                                 <TextBox x:Name="txbTipoOrdenador" Width="150" RenderTransformOrigin="-0.583,-4.334"></TextBox>
                             </StackPanel>
@@ -398,6 +404,37 @@
                     </Grid>
                 </TabItem>
 
+                <!--Gestion de IP-->
+                <TabItem Header="IP">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button x:Name="btnIPNuevo" Click="btnIPNuevo_Click" >Nuevo</Button>
+                            <Button x:Name="btnIPEditar" Click="btnIPEditar_Click" >Editar</Button>
+                            <Button x:Name="btnIPGuardar" Click="btnIPGuardar_Click">Guardar</Button>
+                            <Button x:Name="btnIPCancelar"  Click="btnIPCancelar_Click">Cancelar</Button>
+                            <Button x:Name="btnIPEliminar" Click="btnIPEliminar_Click" >Eliminar</Button>
+                        </WrapPanel>
+                        <WrapPanel Grid.Row="1">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Direccion IP:</TextBlock>
+                                <TextBox x:Name="txbIPDireccion" Width="150"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"/>
+                            <StackPanel Orientation="Horizontal"/>
+                            <StackPanel Orientation="Horizontal"/>
+                            <StackPanel Orientation="Horizontal"/>
+                            <StackPanel Orientation="Horizontal"/>
+
+                        </WrapPanel>
+                        <DataGrid x:Name="dtgIP" Grid.Row="3" IsReadOnly="True"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
         </TabItem>
         
