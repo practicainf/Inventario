@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Inventario</AssemblyName>
-    <ApplicationIcon />
+    <ApplicationIcon>icons8-in-inventory-80.ico</ApplicationIcon>
     <Win32Resource />
     <StartupObject></StartupObject>
   </PropertyGroup>

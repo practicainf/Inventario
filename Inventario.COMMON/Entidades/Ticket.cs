@@ -10,7 +10,6 @@ namespace Inventario.COMMON.Entidades
         public DateTime FechaIngreso{ get; set; }
         public DateTime FechaEntrega{ get; set; }
         public DateTime? FechaRetiro { get; set; }
-
         public List<Equipo> EquipoSolicitado{ get; set; }
         public Funcionario Empleado{ get; set; }
     }

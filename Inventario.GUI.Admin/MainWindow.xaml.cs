@@ -41,16 +41,20 @@ namespace Inventario.GUI.Admin
         IManageEdificios manageEdificios;
         IManagePantallas managePantallas;
         IManageOrdenador manageOrdenadors;
+        IManageFacturas manageFacturas;
+        IManageProveedores manageProveedor;
 
         accion accionFunc;
         accion accionIP;
         accion accionEquip;
+        accion accionFactura;
         accion accionTicket;
         accion accionUnidad;
         accion accionDepartamento;
         accion accionEdificio;
         accion accionPantalla;
         accion accionOrdenador;
+        accion accionProveedor;
 
         Equipo equipo;
         Ordenador ordenador;
@@ -59,6 +63,8 @@ namespace Inventario.GUI.Admin
         Departamento departamento;
         Edificio edificio;
         IP ip;
+        Proveedor proveedor;
+        Factura factura;
 
 
 
@@ -75,11 +81,17 @@ namespace Inventario.GUI.Admin
             manageDepartamentos = new ManageDepartamentos(new RDepartamento());
             manageEdificios = new ManageEdificios(new REdificio());
             manageIPs = new ManageIP(new RIP());
+            manageFacturas = new ManageFactura(new RFactura());
+            manageProveedor = new ManageProveedor(new RProveedor());
                 
 
             EditFuncBtns(false);
             CleanFuncValues();
             UpdateFuncGrid();
+
+            EditProveedorBtns(false);
+            CleanProveedorValues();
+            UpdateProveedorGrid();
             
             EditEquipBtns(false);
             CleanEquipValues();
@@ -96,6 +108,9 @@ namespace Inventario.GUI.Admin
             EditIPBtns(false);
             CleanIPValues();
             UpdateIPGrid();
+
+            CleanFacturaValues();
+            UpdateFacturaGrid();
 
             CleanUnidadValues();
             UpdateUnidadGrid();
@@ -1572,6 +1587,328 @@ namespace Inventario.GUI.Admin
 
 
 
+
+
+
+
+
+        //Boton Guardar Factura
+        private void btnGuardarFactura_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionFactura == accion.New)
+            {
+
+
+                factura.FacturaNumero = txbFacturaNumero.Text;
+                factura.FacturaTipoAdquisicion = txbFacturaAdquisicion.Text;
+                factura.FacturaProveedor = cmbFacturaProveedor.SelectedItem as Proveedor;
+                if (manageFacturas.Create(factura))
+                {
+                    MessageBox.Show("Factura guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanFacturaValues();
+                    //cmbFacturaProveedor.SelectedItem = proveedor.FacturasProveedores.Add(factura);
+
+                    dtgDetalleFactura.IsEnabled = false;
+                    UpdateFacturaGrid();
+
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Factura", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                factura.FacturaNumero = txbFacturaNumero.Text;
+                factura.FacturaTipoAdquisicion = txbFacturaAdquisicion.Text;
+                factura.FacturaProveedor = cmbFacturaProveedor.SelectedItem as Proveedor;
+
+                if (manageFacturas.Update(factura.Id, factura))
+                {
+                    MessageBox.Show("Factura guardada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    CleanFacturaValues();
+                    gridDetalle.IsEnabled = false;
+                    UpdateFacturaGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar Factura", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Factura
+        private void btnCanelarFactura_Click(object sender, RoutedEventArgs e)
+        {
+            CleanFacturaValues();
+            gridDetalleFactura.IsEnabled = false;
+        }
+
+        //Doble Click Factura
+        private void dtgFactura_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Factura u = dtgFactura.SelectedItem as Factura;
+            if (u != null)
+            {
+                gridDetalleFactura.IsEnabled = true;
+                factura = u;
+                ActualizarEquiposEnFactura();
+                accionFactura = accion.Edit;
+
+                txbFacturaNumero.Text = u.FacturaNumero;
+
+
+                ActualizarCombosFactura();
+            }
+
+
+        }
+
+        //Boton Agregar Equipos a Factura
+        private void btnAgregarEquipoFactura_Click(object sender, RoutedEventArgs e)
+        {
+
+            Equipo f = cmbFacturaEquipos.SelectedItem as Equipo;
+
+            if (f != null)
+            {
+                factura.EquiposEnFactura.Add(f);
+                ActualizarEquiposEnFactura();
+            }
+
+        }
+
+        //Boton Eliminar Equipo de Ticket
+        private void btnEliminarEquipoFactura_Click(object sender, RoutedEventArgs e)
+        {
+            Equipo f = dtgDetalleFactura.SelectedItem as Equipo;
+            if (f != null)
+            {
+                factura.EquiposEnFactura.Remove(f);
+                ActualizarEquiposEnFactura();
+            }
+        }
+
+        //Boton Nuevo Factura
+        private void btnNuevoFactura_Click(object sender, RoutedEventArgs e)
+        {
+            CleanFacturaValues();
+            gridDetalleFactura.IsEnabled = true;
+            ActualizarCombosFactura();
+            factura = new Factura();
+            factura.EquiposEnFactura = new List<Equipo>();
+            ActualizarEquiposEnFactura();
+            accionFactura = accion.New;
+        }
+
+        //Actualizar ComboBoxFactura
+        private void ActualizarCombosFactura()
+        {
+
+            cmbFacturaProveedor.ItemsSource = null;
+            cmbFacturaProveedor.ItemsSource = manageProveedor.List;
+            
+            cmbFacturaEquipos.ItemsSource = null;
+            cmbFacturaEquipos.ItemsSource = manageEquipos.List;
+
+        }
+        private void ActualizarCombosFacturaProveedores()
+        {
+
+            cmbFacturaProveedor.ItemsSource = null;
+            cmbFacturaProveedor.ItemsSource = manageProveedor.List;
+
+        }
+
+        //Actualizar Equipos en Factura
+        private void ActualizarEquiposEnFactura()
+        {
+
+            dtgDetalleFactura.ItemsSource = null;
+            dtgDetalleFactura.ItemsSource = factura.EquiposEnFactura;
+
+
+
+        }
+
+        //Boton Eliminar Factura
+        private void btnEliminarFactura_Click(object sender, RoutedEventArgs e)
+        {
+            Factura u = dtgFactura.SelectedItem as Factura;
+            if (u != null)
+            {
+                if (MessageBox.Show("Realmente deseas eliminar esta Factura?", "Almacén", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (manageFacturas.Delete(u))
+                    {
+                        MessageBox.Show("Eliminada con éxito", "Almacén", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        UpdateFacturaGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Algo salio mal...", "Almacén", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        //Actualizar Tabla Factura
+        private void UpdateFacturaGrid()
+        {
+            dtgFactura.ItemsSource = null;
+            dtgFactura.ItemsSource = manageFacturas.List;
+        }
+
+        //Limpiar Valores Factura
+        private void CleanFacturaValues()
+        {
+            txbFacturaNumero.Clear();
+            txbFacturaAdquisicion.Clear();
+            dtgDetalleFactura.ItemsSource = null;
+            cmbFacturaProveedor.ItemsSource = null;
+            cmbFacturaEquipos.ItemsSource = null;
+        }
+
+        private void cmbFacturaEquipos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+        //Actualizar Tabla Proveedor
+        private void UpdateProveedorGrid()
+        {
+            dtgProveedor.ItemsSource = null;
+            dtgProveedor.ItemsSource = manageProveedor.List;
+
+        }
+
+        //Limpiar Valores Proveedor
+        private void CleanProveedorValues()
+        {
+            txbProveedorRut.Clear();
+            txbProveedorName.Clear();
+            txbProveedorFono.Clear();
+
+        }
+
+        //Botones Edicion Proveedor
+        private void EditProveedorBtns(bool value)
+        {
+            btnCancelProveedor.IsEnabled = value;
+            btnEditProveedor.IsEnabled = !value;
+            btnDelProveedor.IsEnabled = !value;
+            btnSaveProveedor.IsEnabled = value;
+            btnNewProveedor.IsEnabled = !value;
+
+
+        }
+
+        //Boton Nuevo Proveedor
+        private void btnNewProveedor_Click(object sender, RoutedEventArgs e)
+        {
+            CleanProveedorValues();
+            EditProveedorBtns(true);
+            accionProveedor = accion.New;
+        }
+
+        //Boton Editar Proveedor
+        private void btnEditProveedor_Click(object sender, RoutedEventArgs e)
+        {
+            Proveedor prov = dtgProveedor.SelectedItem as Proveedor;
+            if (prov != null)
+            {
+                txbProveedorFono.Text = prov.FonoProveedor;
+                txbProveedorName.Text = prov.NombreProveedor;
+                txbProveedorRut.Text = prov.Rut;
+                accionProveedor = accion.Edit;
+                EditProveedorBtns(true);
+            }
+
+        }
+
+        //Boton Guardar Proveedor
+        private void btnSaveProveedor_Click(object sender, RoutedEventArgs e)
+        {
+            if (accionProveedor == accion.New)
+            {
+                Proveedor prov = new Proveedor()
+                {
+                    Rut = txbProveedorRut.Text,
+                    NombreProveedor = txbProveedorName.Text,
+                    FonoProveedor = txbProveedorFono.Text
+                };
+                if (manageProveedor.Create(prov))
+                {
+                    MessageBox.Show("Proveedor agregado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanProveedorValues();
+                    UpdateProveedorGrid();
+                    EditProveedorBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("El Proveedor no se pudo agregar", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                Proveedor prov = dtgProveedor.SelectedItem as Proveedor;
+                prov.Rut = txbProveedorRut.Text;
+                prov.NombreProveedor = txbProveedorName.Text;
+                prov.FonoProveedor = txbProveedorFono.Text;
+                if (manageProveedor.Update(prov.Id, prov))
+                {
+                    MessageBox.Show("Proveedor modificado correctamente", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CleanProveedorValues();
+                    UpdateProveedorGrid();
+                    EditProveedorBtns(false);
+                }
+                else
+                {
+                    MessageBox.Show("El Proveedor no se pudo actualizar", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        //Boton Cancelar Proveedor
+        private void btnCancelProveedor_Click(object sender, RoutedEventArgs e)
+        {
+            CleanProveedorValues();
+            EditProveedorBtns(false);
+        }
+
+        //Boton Eliminar Proveedor
+        private void btnDelProveedor_Click(object sender, RoutedEventArgs e)
+        {
+            {
+                Proveedor prov = dtgProveedor.SelectedItem as Proveedor;
+                if (prov != null)
+                {
+                    if (MessageBox.Show("¿Realmente desea eliminar este Proveedor?", "Inventarios", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        if (manageProveedor.Delete(prov))
+                        {
+                            MessageBox.Show("Proveedor eliminado", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                            UpdateProveedorGrid();
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo eliminar el Proveedor", "Inventarios", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+
+            }
+
+        }
 
 
 
